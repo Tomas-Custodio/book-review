@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\book;
+use App\Models\Book;
+use App\Models\User;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,11 @@ class BookFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            
+        "title" => fake()->sentence(3),
+        "user_id" => User::factory(),
+        "created_at" => fake()->dateTimeBetween("-2 years"),
+        "updated_at" => fake()->dateTimeBetween("created_at",'now'),
         ];
     }
 }

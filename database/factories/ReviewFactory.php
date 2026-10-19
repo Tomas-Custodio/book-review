@@ -2,23 +2,38 @@
 
 namespace Database\Factories;
 
-use App\Models\review;
+use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<review>
- */
 class ReviewFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'review' => fake()->paragraph(),
+            'rating' => fake()->numberBetween(1, 6),
+            'book_id' => Book::factory(),
         ];
+    }
+
+    public function badrate(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rating' => fake()->numberBetween(1, 2),
+        ]);
+    }
+
+    public function goodrate(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rating' => fake()->numberBetween(5, 6),
+        ]);
+    }
+
+    public function softrate(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rating' => fake()->numberBetween(3, 4),
+        ]);
     }
 }
