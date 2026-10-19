@@ -12,7 +12,7 @@ class Review extends Model
     /** @use HasFactory<\Database\Factories\ReviewFactory> */
     use HasFactory;
 
-    #protected $fillble = [];
+    protected $fillble = ['review','rating','book_id'];
 
 
     public function book(){
