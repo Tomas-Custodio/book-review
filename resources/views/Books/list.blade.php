@@ -45,8 +45,10 @@
 
                     </div>
 
+                    <input type="hidden" name="filter" value="{{ request('filter') }}">
+
                     {{-- Action buttons --}}
-                    
+
                     <div class="flex gap-2">
 
                         <button
@@ -75,6 +77,29 @@
             </form>
 
         </section>
+
+        <section class="flex flex-row items-center justify-center gap-4 py-4">
+
+              @php
+                $filters = [
+                    '' => 'latest',
+                    'popular_last_month' => 'popular last month',
+                    'popular_last_6month' => 'popular last 6 month',
+                    'Heighest_rated__last_month' => 'popular last month',
+                    'Heighest_rated__last_6month' => 'popular last 6 month',
+                ];
+
+            @endphp
+
+            @foreach ( $filters as $key => $value )
+
+                <a href="{{ route('books.index', ['filter' => $key]) }}" class="hover:underline focus-within:bg-blue-500 p-1 rounded-sm text-slate-700">{{$value}}</a>
+                
+            @endforeach
+             
+        </section>
+
+
 
         <section class="mx-auto flex w-full max-w-4xl flex-col items-center gap-5">
 
