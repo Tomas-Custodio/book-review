@@ -20,6 +20,11 @@ class Book extends Model
         return $this->hasMany(Review::class,'book_id');
     }
 
+    public function user(){
+
+        return $this->BelongsTo(User::class,'user_id');
+    }
+
     public function scopeTitle( Builder $query , string $title):Builder
     {
         return  $query->where('title', "LIKE","%$title%");

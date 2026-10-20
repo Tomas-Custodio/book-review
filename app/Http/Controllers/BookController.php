@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\book;
+use App\Models\Book;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -19,7 +19,7 @@ class BookController extends Controller
         })->get();
 
         return view('Books.list',compact('books'));
-        
+
     }
 
     #  Method to acess the form to create a new book.

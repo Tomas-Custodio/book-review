@@ -13,7 +13,7 @@
 
 <body>
 
-    @yield('conteudo')
+    @yield('content')
     
 </body>
 </html>
