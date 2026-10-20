@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\review;
+use App\Models\Book;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -18,23 +18,30 @@ class ReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Book $book)
     {
-        //
+        return view('Reviews.create', ['book' => $book]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Book $book)
     {
-        //
+        $data = $request->validate([
+            'review' => 'required|min:3',
+            'rating' => 'required|min:1|max:5|integer'
+        ]);
+
+        $book->reviews()->create($data);
+
+        return redirect()->route('books.details', $book->id);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(review $review)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +49,7 @@ class ReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(review $review)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +57,7 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, review $review)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,7 +65,7 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(review $review)
+    public function destroy(string $id)
     {
         //
     }

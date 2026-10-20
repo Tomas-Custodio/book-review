@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Book;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\BookController;
 
 Route::get('/', function () {
@@ -11,6 +14,16 @@ Route::get('/', function () {
 Route::prefix('books')->controller(BookController::class)->group(function(){
 
     Route::get('/','index')->name('books.index');
-    Route::get('/details','index')->name('books.show');
+    Route::get('/{book}/details','details')->name('books.details');
 
 });
+
+Route::prefix('books')->controller(BookController::class)->group(function(){
+
+    Route::get('/books/{book}/reviews/create', [ReviewController::class, 'create'])
+    ->name('books.reviews.create');
+
+    Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])
+        ->name('books.reviews.store');
+        
+    });

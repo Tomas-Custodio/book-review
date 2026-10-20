@@ -81,19 +81,20 @@
         <section class="flex flex-row items-center justify-center gap-4 py-4">
 
               @php
+              
                 $filters = [
                     '' => 'latest',
-                    'popular_last_month' => 'popular last month',
-                    'popular_last_6month' => 'popular last 6 month',
-                    'Heighest_rated__last_month' => 'popular last month',
-                    'Heighest_rated__last_6month' => 'popular last 6 month',
+                    'popular_last_month' => 'Popular last month',
+                    'popular_last_6month' => 'Popular last 6 month',
+                    'Heighest_rated__last_month' => 'Heighest rated last month',
+                    'Heighest_rated__last_6month' => 'Heighest rated last 6 month',
                 ];
 
             @endphp
 
             @foreach ( $filters as $key => $value )
 
-                <a href="{{ route('books.index', ['filter' => $key]) }}" class="hover:underline focus-within:bg-blue-500 p-1 rounded-sm text-slate-700">{{$value}}</a>
+                <a href="{{ route('books.index', [ ...request()->query(),'filter' => $key]) }}" class="hover:underline focus-within:bg-blue-500 p-1 rounded-sm text-slate-700">{{$value}}</a>
                 
             @endforeach
              
@@ -101,13 +102,17 @@
 
 
 
+
         <section class="mx-auto flex w-full max-w-4xl flex-col items-center gap-5">
 
             @forelse ($books as $book)
 
+
                 <article class="flex min-h-36 w-full flex-col justify-between 
                     gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm 
                         transition hover:shadow-md">
+
+                         <p><span class="text-slate-400">#idNª</span> {{$book->id }}</p>
 
                     {{-- Reviews and ratings --}}
 
@@ -133,7 +138,7 @@
                     <div class="flex-grow">
 
                         <a
-                            href="{{ route('books.show', $book) }}"
+                            href="{{ route('books.details', $book->id) }}"
                             class="text-lg font-bold text-slate-900 transition hover:text-blue-600">
 
                             {{ $book->title }}

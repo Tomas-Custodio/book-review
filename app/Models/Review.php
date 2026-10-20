@@ -12,12 +12,26 @@ class Review extends Model
     /** @use HasFactory<\Database\Factories\ReviewFactory> */
     use HasFactory;
 
-    protected $fillble = ['review','rating','book_id'];
+    protected $fillable = ['review','rating','book_id'];
+
+    
 
 
     public function book(){
 
         return $this->BelongsTo(Book::class,'book_id');
+
+    }
+
+    protected static function booted () {
+
+        Static::updated( 
+
+            fn(Review $review) => cache()->forget('book:' . $review->book_id));
+
+         Static::deleted( 
+
+            fn(Review $review) => cache()->forget('book:' . $review->book_id));
 
     }
 }

@@ -4,23 +4,77 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BookController extends Controller
 {
      #  Method to acess a list of books.
 
-    public function index( Request $request) {
+    // public function index( Request $request) {
 
-       $title = $request->input('title');
-       $books = BooK::when($title,function( $query ,$title) {
+    //    $title = $request->input('title');
+    //    $filter = $request->input('filter');
 
-            return $query->Title($title); 
+    //    $books = BooK::when($title,function( $query ,$title) {
 
-        })->get();
+    //         return $query->Title($title); })->get();
 
-        return view('Books.list',compact('books'));
+    //     $books = Match( $filter ) {
 
-    }
+    //         'popular_last_month' => $books->PopularLastMonth,
+    //         'popular_last_6month' => $books->PopularLast6Months,
+
+    //         'highest_rated_last_month' => $books->HighestRatedLastMonth,
+    //         'highest_rated_last_6month' => $books->HighestRatedLast6Months,
+
+    //     };
+
+    //     $books = $books->get();
+
+    //     return view('Books.list',compact('books'));
+
+    // }
+
+
+    public function index(Request $request){
+
+    $title = $request->input('title');
+    $filter = $request->input('filter');
+
+    $book = Book::query()->when($title, function ($query, $title) {
+        return $query->title($title);
+        });
+
+    $query = match ($filter) {
+
+        'popular_last_month' => $book->popularLastMonth(),
+
+        'popular_last_6month' =>$book->popularLast6Months(),
+
+        'highest_rated_last_month' =>$book->highestRatedLastMonth(),
+
+        'highest_rated_last_6month' =>$book->highestRatedLast6Months(),
+
+        default => $book
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating'),
+    };
+    
+        $cachKey = "book:". $title .":". $filter ;
+
+        $books = 
+        
+            // cache::remember(
+            // $cachKey, 3600,
+            // fn() => 
+            
+            $book->get();
+        // );
+
+        $books = $query->get();
+
+    return view('Books.list', compact('books'));
+}
 
     #  Method to acess the form to create a new book.
 
@@ -45,10 +99,25 @@ class BookController extends Controller
 
      #  Method to acess see books details.
 
-    public function details(book $book) {
 
-        $book->delete();
-    }
+
+       /*  $book->with('reviews'); */
+
+    public function details(Book $book){
+    /* dd($book); */
+
+    $cachKey = "book:". $book->id;
+
+        $books = cache::remember(
+
+            $cachKey, 3600,
+
+            fn() => 
+            Book::with(['reviews' => fn($query) => $query->latest()])->WithAvgRating()->findorFail($book->id)
+        );
+
+    return view('Books.details', compact('book'));
+}
 
     #  Method to acess the form to edit a book.
 
