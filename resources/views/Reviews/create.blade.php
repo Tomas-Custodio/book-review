@@ -67,7 +67,7 @@
                     minlength="15"
                     required
                     placeholder="O que achaste deste livro? O que aprendeste com a leitura?"
-                    class="input w-full"
+                    class="input w-full bg-slate-200 p-3"
                 >{{ old('review') }}</textarea>
 
                 @error('review')
@@ -84,7 +84,7 @@
                     name="rating"
                     id="rating"
                     required
-                    class="input w-full"
+                    class="input w-full bg-gray-300 p-2 rounded-sm"
                 >
                     <option value="">Escolhe uma classificação</option>
 
@@ -105,7 +105,7 @@
             </div>
 
             <div class="flex flex-col gap-3 border-t border-gray-100 pt-5 sm:flex-row">
-                <button type="submit" class="btn">
+                <button type="submit" class="btn bg-blue-500 rounded-sm p-1 text-white">
                     Publicar avaliação
                 </button>
 
