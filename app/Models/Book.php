@@ -42,7 +42,7 @@ class Book extends Model
 
      }
 
-  public function scopePopular(Builder $query, ?string $from = null, ?string $to = null): Builder {
+  public function scopePopular(Builder $query, ?string $from = null, ? string $to = null): Builder {
 
 
         return $query->withCount([
@@ -65,7 +65,7 @@ class Book extends Model
 
             if ($from && $to) {
 
-                $query->whereBetween('created_at', [$from, $to]);
+                $query->whereBetween('created_at', [$from, $to] );
 
             } elseif ($from) {
 
@@ -89,18 +89,16 @@ class Book extends Model
         }
 
         public function scopeHighestRatedLastMonth(Builder $query): Builder {
-            return $query->highestRated(now()->subMonth(), now())->popular(now()->subMonth(), now())->minReviews(2);
+
+            return $query->highestRated( now()->subMonth(), now())->popular(now()->subMonth(), now())->minReviews(2);
         }
 
         public function scopeHighestRatedLast6Months(Builder $query): Builder{
             
-            return $query->highestRated(now()->subMonths(6), now())->popular(now()->subMonths(6), now())->minReviews(5);
+            return $query->highestRated( now()->subMonths(6), now())->popular(now()->subMonths(6), now())->minReviews(5);
         }
 
 
-
-
-    
     protected static function booted () {
 
         Static::updated( 
@@ -110,8 +108,6 @@ class Book extends Model
          Static::deleted( 
 
             fn(Book $book) => cache()->forget('book:' . $book->id));
-
-
     }
 
     
